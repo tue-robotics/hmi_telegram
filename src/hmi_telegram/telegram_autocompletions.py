@@ -25,6 +25,8 @@ class TelegramAutocompletions(AbstractHMIServer):
         self._intermediate_answer = []
         self._answer_ready = Event()
 
+        self._timeout = 300
+
     @property
     def intermediate_sentence(self):
         return ' '.join(self._intermediate_answer)
@@ -46,7 +48,11 @@ class TelegramAutocompletions(AbstractHMIServer):
                                           options=sorted(set(
                                               self._grammar_parser.next_word(self._target,self._intermediate_answer)))))
 
-        if self._answer_ready.wait():
+        start = rospy.Time.now()
+        while not rospy.is_shutdown() and rospy.Time.now() < start + rospy.Duration(self._timeout):
+            self._answer_ready.wait(1)
+
+        if self._answer_ready.is_set():
             self._answer_ready.clear()
 
             try:
@@ -81,8 +87,8 @@ class TelegramAutocompletions(AbstractHMIServer):
                 self._grammar_parser.next_word(self._target, self.intermediate_sentence.split(' '))))
 
             if completions:
-                rospy.loginfo("Done: there are {} completions available".format(len(completions)))
-                self._options_pub.publish(Options(options=completions))
+                rospy.loginfo("There are {} completions available, proposing..".format(len(completions)))
+                self._options_pub.publish(Options(question=self.intermediate_sentence, options=completions))
             else:
                 rospy.loginfo("Done: there are no more completions available after '{}'".format(self.intermediate_sentence))
                 self._answer_ready.set()
