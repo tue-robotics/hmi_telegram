@@ -49,14 +49,17 @@ class TelegramAutocompletions(AbstractHMIServer):
                                               self._grammar_parser.next_word(self._target,self._intermediate_answer)))))
 
         start = rospy.Time.now()
-        while not rospy.is_shutdown() and rospy.Time.now() < start + rospy.Duration(self._timeout):
+        while not rospy.is_shutdown() and \
+                        rospy.Time.now() < start + rospy.Duration(self._timeout) and \
+                not self._answer_ready.isSet():
             self._answer_ready.wait(1)
 
         if self._answer_ready.is_set():
+            rospy.loginfo("Answer is ready")
             self._answer_ready.clear()
 
             try:
-                sentence = ' '.join(self._intermediate_answer)
+                sentence = self.intermediate_sentence
                 rospy.loginfo("Gathered sentence: %s", sentence)
                 if sentence:
                     semantics = parse_sentence(sentence, grammar, target)
@@ -75,7 +78,7 @@ class TelegramAutocompletions(AbstractHMIServer):
         rospy.loginfo("Got another bit: {}".format(msg.data))
 
         if msg.data == '.' or msg.data.endswith('.'):
-            rospy.loginfo("Done: '{}' signifies end of sentence")
+            rospy.loginfo("Done: '{}' signifies end of sentence".format(msg.data))
             self._answer_ready.set()
         else:
             self._intermediate_answer += [msg.data]
