@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="token"/>
+
+    <node pkg="hmi_telegram" type="test_autocompletions.py" name="test_autocompletions" required="false" output="screen"/>
+
+    <node pkg="hmi" type="multi_client" name="hmi" required="false" output="screen"/>
+    <group ns="hmi">
+        <node pkg="hmi_telegram" type="telegram_autocompletions" name="telegram_autocompletions" required="false" output="screen"/>
+
+        <node pkg="telegram_ros" type="telegram_ros_bridge" name="telegram_ros_bridge" required="false" output="screen">
+            <rosparam param="token" subst_value="True">$(arg token)</rosparam>
+            <rosparam param="caption_as_frame_id">true</rosparam>
+        </node>
+    </group> <!-- ns="hmi" -->
+</launch>
