@@ -32,6 +32,7 @@ if __name__ == "__main__":
 
     rospy.sleep(rospy.Duration(5))
 
+    rospy.logwarn("Press enter to continue after you have started a conversation with the bot")
     raw_input("Press enter to continue after you have started a conversation with the bot")
 
     result = client.query("What is your order?",
