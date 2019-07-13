@@ -19,6 +19,7 @@ class TelegramAutocompletions(AbstractHMIServer):
 
         self._messsage_sub = rospy.Subscriber('message_to_ros', String, self._message_cb)
         self._options_pub = rospy.Publisher('options_from_ros', Options, queue_size=1)
+        self._message_pub = rospy.Publisher('message_from_ros', String, queue_size=1)
 
         self._grammar_parser = None  # type: CFGParser
         self._target = ''
@@ -64,6 +65,7 @@ class TelegramAutocompletions(AbstractHMIServer):
                 if sentence:
                     semantics = parse_sentence(sentence, grammar, target)
                     rospy.loginfo("Parsed semantics: %s", semantics)
+                    self._message_pub.publish("Completed sentence: '{}'. Thnx!".format(sentence))
 
                     self._intermediate_answer = []
                     self._target = ''
@@ -71,6 +73,7 @@ class TelegramAutocompletions(AbstractHMIServer):
             except Exception:
                 raise
         else:
+            self._message_pub.publish("Sorry, that took too long")
             rospy.loginfo("Telegram took to look to complete the query")
 
     def _message_cb(self, msg):
@@ -91,7 +94,7 @@ class TelegramAutocompletions(AbstractHMIServer):
 
             if completions:
                 rospy.loginfo("There are {} completions available, proposing..".format(len(completions)))
-                self._options_pub.publish(Options(question=self.intermediate_sentence, options=completions))
+                self._options_pub.publish(Options(question=self.intermediate_sentence + '...', options=completions))
             else:
                 rospy.loginfo("Done: there are no more completions available after '{}'".format(self.intermediate_sentence))
                 self._answer_ready.set()
