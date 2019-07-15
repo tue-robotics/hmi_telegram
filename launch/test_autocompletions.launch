@@ -2,7 +2,10 @@
 <launch>
     <arg name="token"/>
 
-    <node pkg="hmi_telegram" type="test_autocompletions.py" name="test_autocompletions" required="true" output="screen"/>
+    <node pkg="hmi_telegram" type="test_autocompletions.py" name="test_autocompletions" required="true" output="screen">
+        <param name="grammar_file" value="/home/loy/ros/kinetic/system/src/grammar_parser/test/eegpsr_grammar.fcfg"/>
+        <param name="target" value="T"/>
+    </node>
 
     <node pkg="hmi" type="multi_client" name="hmi" required="true" output="screen"/>
     <group ns="hmi">
