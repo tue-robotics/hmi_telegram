@@ -11,6 +11,6 @@ catkin_package()
 ## Testing ##
 #############
 
-#if (CATKIN_ENABLE_TESTING)
-#  catkin_add_nosetests(test/nose)
-#endif()
+if (CATKIN_ENABLE_TESTING)
+  catkin_add_nosetests(test)
+endif()
