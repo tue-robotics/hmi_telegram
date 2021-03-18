@@ -24,4 +24,9 @@
   <exec_depend>actionlib</exec_depend>
   <exec_depend>hmi_msgs</exec_depend>
 
+  <doc_depend condition="$ROS_PYTHON_VERSION == 2">python-sphinx</doc_depend>
+  <doc_depend condition="$ROS_PYTHON_VERSION == 3">python3-sphinx</doc_depend>
+  <doc_depend>python-sphinx-autoapi-pip</doc_depend>
+  <doc_depend>python-sphinx-rtd-theme-pip</doc_depend>
+
 </package>
