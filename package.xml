@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<package>
+<?xml-model
+  href="http://download.ros.org/schema/package_format3.xsd"
+  schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>hmi_telegram</name>
   <version>0.0.1</version>
   <description>hmi_telegram allows you to perform HMI queries to a user connected via Telegram.
@@ -12,9 +15,13 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>grammar_parser</run_depend>
-  <run_depend>hmi</run_depend>
-  <run_depend>rospy</run_depend>
-  <run_depend>telegram_ros</run_depend>
+  <depend>grammar_parser</depend>
+  <depend>hmi</depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>telegram_ros</depend>
+
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>hmi_msgs</exec_depend>
 
 </package>
