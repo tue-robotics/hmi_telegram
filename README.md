@@ -1,6 +1,6 @@
 # hmi_telegram
 
-[![CI](https://github.com/tue-robotics/hmi_telegram/workflows/CI/badge.svg)](https://github.com/tue-robotics/hmi_telegram/actions)
+[![CI](https://github.com/tue-robotics/hmi_telegram/actions/workflows/main.yml/badge.svg)](https://github.com/tue-robotics/hmi_telegram/actions/workflows/main.yml)
 
 Server for [HMI](https://github.com/tue-robotics/hmi) to iteratively suggestion options to be presented as a custom keyboard for Telegram, through [telegram_ros](https://github.com/tue-robotics/telegram_ros)
 
